@@ -8,15 +8,17 @@
 
 {% if globals.css_main %}
 	<link rel="stylesheet" type="text/css" media="all" href="{{globals.base_static}}{{globals.css_main}}"/>
-{% endif %}
+{% end %}
 
 {% if globals.css_color %}
 	<link rel="stylesheet" type="text/css" media="all" href="{{globals.base_static}}{{globals.css_color}}"/>
-{% endif %}
+{% end %}
 
+{% if globals.extra_css %}
 {% for css in globals.extra_css %}
-<link rel="stylesheet" type="text/css" media="all" href="{{globals.base_static}}css/{{css}}"/>
-{% endfor %}
+    <link rel="stylesheet" type="text/css" media="all" href="{{globals.base_static}}css/{{css}}"/>
+{% end %}
+{% end %}
 
 <!--[if lte IE 6]>
 <link rel="stylesheet" type="text/css" media="screen" href="{{globals.base_static}}css/ie6-hacks.css" />
@@ -26,19 +28,19 @@
 
 {% if globals.noindex %}
 	<meta name="robots" content="noindex,follow"/>
-{% endif %}	
+{% end %}	
 
 {% if globals.tags %}
 	<meta name="keywords" content="{{globals.tags}}" />
-{% endif %}
+{% end %}
 
 {% if globals.description %}
 	<meta name="description" content="{{globals.description}}" />
-{% endif %}
+{% end %}
 
 {% if globals.link %}
 	<link rel="pingback" href="http://{{globals.server_name}}{{globals.base_url}}xmlrpc.php"/>
-{% endif %}
+{% end %}
 
 <link rel="microsummary" type="application/x.microsummary+xml" href="{{globals.base_url}}microsummary.xml" />
 <link rel="search" type="application/opensearchdescription+xml" title="búsqueda" href="http://{{globals.server_name}}{{globals.base_url}}opensearch_plugin.php"/>
@@ -50,24 +52,26 @@
 	<link rel="shortcut icon" href="{{globals.base_static}}{{globals.favicon}}" type="image/x-icon"/>
 {% else %}
 	<link rel="shortcut icon" href="{{globals.base_static}}img/favicons/favicon4.ico" type="image/x-icon"/>
-{% endif %}
+{% end %}
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
 <script src="{{globals.base_url}}js/{{globals.js_main}}" type="text/javascript" charset="utf-8"></script>
 
+{% if globals.extra_js %}
 {% for js in globals.extra_js %}
 	{% if js %}
 		<script src="{{js}}" type="text/javascript"></script>
 	{% else %}
 		<script src="{{globals.base_static}}js/{{js}}" type="text/javascript"></script>
-	{% endif %}
-{% endfor %}
+	{% end %}
+{% end %}
+{% end %}
 
 {% if globals.extra_js_text %}
 	<script type="text/javascript">
 	{{globals.extra_js_text}}
 	</script>
-{% endif %}
+{% end %}
 
 <script type="text/javascript">
 if(top.location != self.location)top.location = self.location;
@@ -78,11 +82,11 @@ var base_key="{{globals.security_key}}";
 	<meta name="thumbnail_url" content="{{globals.thumbnail}}"/>
 {% else %}
 	<meta name="thumbnail_url" content="http://{{globals.static_server_name}}{{globals.base_url}}{{globals.thumbnail_logo}}"/>
-{% endif %}
+{% end %}
 
 {% if globals.extra_head %}
 	{{ globals.extra_head}}
-{% endif %}
+{% end %}
 
 </head>
 <body id="{{id}}" {{globals.body_args}}>
@@ -95,38 +99,38 @@ var base_key="{{globals.security_key}}";
 <form action="{{globals.base_url}}search.php" method="get" name="top_search">
 <img src="{{globals.base_static}}img/common/search-left-04.png" width="6" height="22" alt=""/>
 {% if globals.q %}
-	<input type="text" name="q" value="{{globals.q|escape}}" />
+	<input type="text" name="q" value="{{escape(globals.q)}}" />
 {% else %}
 	<input name="q" value="buscar'..." type="text" onblur="if(this.value=='') this.value='buscar...';" onfocus="if(this.value=='buscar...') this.value='';"/>
-{% endif %}
+{% end %}
 
 <a href="javascript:document.top_search.submit()"><img class="searchIcon" alt="buscar" src="{{globals.base_static}}img/common/search-04.png" id="submit_image" width="28" height="22"/></a>
 
 {% if globals.search_options %}
 	{% for name, value in globals.search_options %}
 		<input type="hidden" name="{{name}}" value="{{value}}"/>
-	{% endfor %}
-{% endif %}
+	{% end %}
+{% end %}
 
 </form>
 </li>
 
 <li><a href="http://meneame.wikispaces.com/Comenzando">ayuda <img src="{{globals.base_static}}img/common/help-bt-02.png" alt="help button" title="ayuda" width="13" height="16" /></a></li>
-{% if current_user.admin %}
+{% if current_user and current_user.admin %}
 	<li><a href="{{globals.base_url}}admin/bans.php">admin <img src="{{globals.base_static}}img/common/tools-bt-02.png" alt="tools button" title="herramientas" width="16" height="16" /> </a></li>
-{% endif %}
+{% end %}
 
-{% if current_user.authenticated %}
+{% if current_user and current_user.authenticated %}
 	<li><a href="" 
 		{% if globals.greetings %}
 			 title="menéame te saluda en {{globals.greetings}}"
-		{% endif %}>
+		{% end %}>
 	{{greeting}}&nbsp;{{current_user.user_login}}&nbsp;<img src="" width="20" height="20" alt="{{current_user.user_login}}"/></a></li>
-	<li><a href="{{globals.base_url}}login.php?op=logout&amp;return={{globals.uri|urlencode}}">cerrar sesión <img src="{{globals.base_static}}img/common/logout-bt-02.png" alt="" title="logout" width="22" height="16" /></a></li>
+	<li><a href="{{globals.base_url}}login.php?op=logout&amp;return={{url_escape(globals.uri)}}">cerrar sesión <img src="{{globals.base_static}}img/common/logout-bt-02.png" alt="" title="logout" width="22" height="16" /></a></li>
 {% else %}
 	<li><a href="{{globals.base_url}}register.php"> registrarse <img src="{{globals.base_static}}img/common/register-bt-02.png" alt="" title="register" width="16" height="18" /></a></li>
-	<li><a href="{{globals.base_url}}login.php?return={{globals.uri|urlencode}}">login <img src="{{globals.base_static}}img/common/login-bt-02.png" alt="" title="login" width="22" height="16" /></a></li>
-{% endif %}
+	<li><a href="{{globals.base_url}}login.php?return={{url_escape(globals.uri)}}">login <img src="{{globals.base_static}}img/common/login-bt-02.png" alt="" title="login" width="22" height="16" /></a></li>
+{% end %}
 
 </ul></div>
 
