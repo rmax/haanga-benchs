@@ -1,0 +1,3 @@
+{% for o in objects %}
+	<p>La hora ({{ o.i|escape }}) en epochs es: {{o.epoch}} ({{ o.epoch|date:"r" }})
+{% endfor %}
