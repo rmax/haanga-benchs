@@ -1,0 +1,3 @@
+#lista de requerimientos del motor
+django==1.2.1
+gunicorn
